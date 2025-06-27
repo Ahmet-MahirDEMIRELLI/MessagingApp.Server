@@ -18,7 +18,22 @@ builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(buil
 
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IMessageRepository, MessageRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IMessageService, MessageService>();
+
+var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: MyAllowSpecificOrigins,
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:64242")  // Flutter web uygulamanýn adresi
+      .AllowAnyHeader()
+      .AllowAnyMethod();
+        });
+});
+
 
 var app = builder.Build();
 
@@ -28,7 +43,9 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
-app.UseHttpsRedirection();
+app.UseCors(MyAllowSpecificOrigins);
+
+//app.UseHttpsRedirection();
 
 app.UseAuthorization();
 

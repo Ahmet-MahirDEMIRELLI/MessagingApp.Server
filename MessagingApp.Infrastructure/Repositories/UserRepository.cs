@@ -18,5 +18,10 @@ namespace MessagingApp.Infrastructure.Repositories
         {
             return await _dbSet.FirstOrDefaultAsync(u => u.Nickname == nickname);
         }
+
+        public async Task<User?> GetKeysByNicknameAsync(string nickname)
+        {
+            return await _dbSet.FirstOrDefaultAsync(u => u.Nickname == nickname);
+        }
     }
 }

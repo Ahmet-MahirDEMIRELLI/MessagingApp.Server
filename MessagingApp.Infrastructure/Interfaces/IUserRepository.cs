@@ -7,6 +7,7 @@ namespace MessagingApp.Infrastructure.Interfaces
     public interface IUserRepository : IGenericRepository<User>
     {
         Task<User?> GetByNicknameAsync(string nickname);
+        Task<User?> GetKeysByNicknameAsync(string nickname);
     }
 
 }

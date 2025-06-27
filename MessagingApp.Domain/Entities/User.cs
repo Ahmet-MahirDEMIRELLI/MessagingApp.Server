@@ -1,18 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace MessagingApp.Domain.Entities
 {
     public class User
     {
-        public User(string nickname, string publicKey, DateTime lastActivityDate, DateTime createdAt)
+        public User(string nickname, string x25519PublicKey, string ed25519PublicKey, DateTime lastActivityDate, DateTime createdAt)
         {
             Nickname = nickname;
-            PublicKey = publicKey;
+            X25519PublicKey = x25519PublicKey;
+            Ed25519PublicKey = ed25519PublicKey;
             LastActivityDate = lastActivityDate;
             CreatedAt = createdAt;
         }
@@ -22,7 +18,8 @@ namespace MessagingApp.Domain.Entities
         [Key]
         public string Nickname { get; set; }
 
-        public string PublicKey { get; set; } = string.Empty;
+        public string X25519PublicKey { get; set; } = string.Empty;
+        public string Ed25519PublicKey { get; set; } = string.Empty;
 
         public DateTime LastActivityDate { get; set; } = DateTime.UtcNow;
 

@@ -1,7 +1,6 @@
 ﻿using MessagingApp.Application.DTOs;
 using MessagingApp.Application.Interfaces;
 using MessagingApp.Domain.Entities;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MessagingApp.Api.Controller
@@ -17,35 +16,28 @@ namespace MessagingApp.Api.Controller
             _userService = userService;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetAll()
+        [HttpGet("getKeysByNickname/{nickname}")]
+        public async Task<IActionResult> GetKeysByNickname(string nickname)
         {
-            var users = await _userService.GetAllUsersAsync();
-            return Ok(users);
-        }
-
-        [HttpGet("{nickname}")]
-        public async Task<IActionResult> GetByNickname(string nickname)
-        {
-            var user = await _userService.GetUserByNicknameAsync(nickname);
-            if (user == null)
+            var userInformation = await _userService.GetKeysByNicknameAsync(nickname);
+            if (userInformation == null)
                 return NotFound();
 
-            return Ok(user);
+            return Ok(userInformation);
         }
 
-        [HttpPost]
+        [HttpPost("createUser")]
         public async Task<IActionResult> Create([FromBody] CreateUserDto createUserDto)
         {
             if (!ModelState.IsValid)
-                return BadRequest("Nickname and PublicKey must not be empty.");
+                return BadRequest("Nickname and PublicKeys must not be empty.");
 
             var createdUser = await _userService.CreateUserAsync(createUserDto);
 
             if (createdUser == null)
                 return BadRequest("Invalid nickname or user already exists.");
 
-            return CreatedAtAction(nameof(GetByNickname), new { nickname = createdUser.Nickname }, createdUser);
+            return CreatedAtAction(nameof(GetKeysByNickname), new { nickname = createdUser.Nickname }, createdUser);
         }
 
         [HttpPut("{nickname}")]

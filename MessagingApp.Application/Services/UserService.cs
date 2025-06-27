@@ -29,6 +29,22 @@ namespace MessagingApp.Application.Services
             return await _userRepository.GetByNicknameAsync(nickname);
         }
 
+        public async Task<UserInformation?> GetKeysByNicknameAsync(string nickname)
+        {
+
+            User? user = await _userRepository.GetKeysByNicknameAsync(nickname);
+            if(user == null)
+            {
+                return null;
+            }
+
+            UserInformation userInformation = new UserInformation();
+            userInformation.X25519PublicKey = user.X25519PublicKey;
+            userInformation.Ed25519PublicKey = user.Ed25519PublicKey;
+            return userInformation;
+
+        }
+
         public async Task<User?> CreateUserAsync(CreateUserDto createUserDto)
         {
             var existingUser = await GetUserByNicknameAsync(createUserDto.Nickname);
@@ -37,7 +53,7 @@ namespace MessagingApp.Application.Services
                 return null;
             }
 
-            var user = new User(createUserDto.Nickname, createUserDto.PublicKey, DateTime.UtcNow, DateTime.UtcNow);
+            var user = new User(createUserDto.Nickname, createUserDto.X25519PublicKey, createUserDto.Ed25519PublicKey, DateTime.UtcNow, DateTime.UtcNow);
             await _userRepository.AddAsync(user);
             await _userRepository.SaveChangesAsync();
             return user;
@@ -50,7 +66,8 @@ namespace MessagingApp.Application.Services
                 return false;
 
             // Güncellenebilir alanlar
-            existingUser.PublicKey = user.PublicKey;
+            existingUser.X25519PublicKey = user.X25519PublicKey;
+            existingUser.Ed25519PublicKey = user.Ed25519PublicKey;
             existingUser.LastActivityDate = DateTime.UtcNow;
 
             _userRepository.Update(existingUser);

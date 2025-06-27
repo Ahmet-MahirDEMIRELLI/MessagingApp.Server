@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 
 namespace MessagingApp.Application.DTOs
 {
-    public class CreateUserDto
+    public class SendMessageDto
     {
         [Required]
-        public string Nickname { get; set; }
+        public string Sender { get; set; }
         [Required]
-        public string X25519PublicKey { get; set; }
+        public string Receiver { get; set; }
         [Required]
-        public string Ed25519PublicKey { get; set; }
+        public string Content { get; set; }
     }
 }
