@@ -20,6 +20,7 @@ namespace MessagingApp.Domain.Entities
         public Message() { }
 
         [Key]
+        public int MessageId { get; set; }
         public string Sender { get; set; }
 
         public string Receiver { get; set; } = string.Empty;

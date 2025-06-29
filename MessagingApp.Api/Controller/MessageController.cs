@@ -17,6 +17,13 @@ namespace MessagingApp.Api.Controller
             _messageService = messageService;
         }
 
+        [HttpGet("getNewMessages/{nickname}/{lastMessageTime}")]
+        public async Task<IActionResult> GetNewMessages(string nickname, String lastMessageTime)
+        {
+            var messages = await _messageService.GetNewMessagesAsync(nickname, lastMessageTime);
+            return Ok(messages);
+        }
+
         [HttpGet("getMessagesByNickname/{nickname}")]
         public async Task<IActionResult> getMessagesByNickname(string nickname)
         {

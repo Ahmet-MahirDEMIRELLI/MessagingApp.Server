@@ -22,10 +22,11 @@ namespace MessagingApp.Infrastructure.Persistence
 
             modelBuilder.Entity<Message>(entity =>
             {
-                entity.HasKey(u => u.Sender);
-                entity.Property(u => u.Receiver).IsRequired();
-                entity.Property(u => u.Content).IsRequired();
-                entity.Property(u => u.Timestamp).IsRequired();
+                entity.HasKey(m => m.MessageId);
+                entity.Property(m => m.Sender);
+                entity.Property(m => m.Receiver).IsRequired();
+                entity.Property(m => m.Content).IsRequired();
+                entity.Property(m => m.Timestamp).IsRequired();
             });
         }
     }

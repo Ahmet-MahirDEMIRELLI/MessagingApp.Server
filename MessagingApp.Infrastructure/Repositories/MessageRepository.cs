@@ -16,6 +16,17 @@ namespace MessagingApp.Infrastructure.Repositories
         {
         }
 
+        public async Task<List<Message>?> GetNewMessagesAsync(string nickname, string lastMessageTime)
+        {
+            if (!DateTime.TryParse(lastMessageTime, out DateTime parsedTime))
+                return null;
+            
+            return await _dbSet
+                .Where(m => m.Receiver == nickname && m.Timestamp > parsedTime)
+                .OrderBy(m => m.Timestamp)
+                .ToListAsync();
+        }
+
         public async Task<List<Message>?> GetMessagesByNicknameAsync(string nickname)
         {
             return await _dbSet.Where(m => m.Receiver == nickname).ToListAsync();

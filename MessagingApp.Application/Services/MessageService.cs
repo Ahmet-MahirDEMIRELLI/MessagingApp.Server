@@ -22,6 +22,16 @@ namespace MessagingApp.Application.Services
             _userService = userService;
         }
 
+        public async Task<List<Message>> GetNewMessagesAsync(string nickname, String lastMessageTime)
+        {
+            return await _messageRepository.GetNewMessagesAsync(nickname, lastMessageTime);
+        }
+
+        public async Task<List<Message>> GetMessagesByNicknameAsync(string nickname)
+        {
+            return await _messageRepository.GetMessagesByNicknameAsync(nickname);
+        }
+
         public async Task<Message> SendMessageAsync(SendMessageDto sendMessageDto)
         {
             var existingUser = await _userService.GetUserByNicknameAsync(sendMessageDto.Sender);
@@ -36,15 +46,10 @@ namespace MessagingApp.Application.Services
                 return null;
             }
 
-            var message = new Message(sendMessageDto.Sender, sendMessageDto.Receiver, sendMessageDto.Content, DateTime.UtcNow);
+            var message = new Message(sendMessageDto.Sender.ToLower(), sendMessageDto.Receiver.ToLower(), sendMessageDto.Content, DateTime.UtcNow);
             await _messageRepository.AddAsync(message);
             await _messageRepository.SaveChangesAsync();
             return message;
-        }
-
-        public async Task<List<Message>> GetMessagesByNicknameAsync(string nickname)
-        {
-            return await _messageRepository.GetMessagesByNicknameAsync(nickname);
         }
     }
 }

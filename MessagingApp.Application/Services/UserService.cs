@@ -31,7 +31,6 @@ namespace MessagingApp.Application.Services
 
         public async Task<UserInformation?> GetKeysByNicknameAsync(string nickname)
         {
-
             User? user = await _userRepository.GetKeysByNicknameAsync(nickname);
             if(user == null)
             {
@@ -47,6 +46,7 @@ namespace MessagingApp.Application.Services
 
         public async Task<User?> CreateUserAsync(CreateUserDto createUserDto)
         {
+            createUserDto.Nickname = createUserDto.Nickname.ToLower();
             var existingUser = await GetUserByNicknameAsync(createUserDto.Nickname);
             if (existingUser != null)
             {
