@@ -15,5 +15,7 @@ namespace MessagingApp.Application.DTOs
         public string Receiver { get; set; }
         [Required]
         public string Content { get; set; }
+        [Required]
+        public string Signature { get; set; }
     }
 }

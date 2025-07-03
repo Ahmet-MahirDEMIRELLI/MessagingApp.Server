@@ -6,6 +6,7 @@ using MessagingApp.Infrastructure.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -15,11 +16,13 @@ namespace MessagingApp.Application.Services
     {
         private readonly IMessageRepository _messageRepository;
         private readonly IUserService _userService;
+        private readonly ISignatureRepository _signatureRepository;
 
-        public MessageService(IMessageRepository messageRepository, IUserService userService)
+        public MessageService(IMessageRepository messageRepository, IUserService userService, ISignatureRepository signatureRepository)
         {
             _messageRepository = messageRepository;
             _userService = userService;
+            _signatureRepository = signatureRepository;
         }
 
         public async Task<List<Message>> GetNewMessagesAsync(string nickname, String lastMessageTime)
@@ -34,19 +37,27 @@ namespace MessagingApp.Application.Services
 
         public async Task<Message> SendMessageAsync(SendMessageDto sendMessageDto)
         {
-            var existingUser = await _userService.GetUserByNicknameAsync(sendMessageDto.Sender);
-            if (existingUser == null)
+            var sender = await _userService.GetUserByNicknameAsync(sendMessageDto.Sender);
+            if (sender == null)
             {
                 return null;
             }
 
-            existingUser = await _userService.GetUserByNicknameAsync(sendMessageDto.Receiver);
-            if (existingUser == null)
+            var receiver = await _userService.GetUserByNicknameAsync(sendMessageDto.Receiver);
+            if (receiver == null)
             {
                 return null;
             }
 
             var message = new Message(sendMessageDto.Sender.ToLower(), sendMessageDto.Receiver.ToLower(), sendMessageDto.Content, DateTime.UtcNow);
+            string signedData = $"{message.Sender}|{message.Receiver}|{message.Content}";
+            byte[] signatureBytes = Convert.FromBase64String(sendMessageDto.Signature);
+            byte[] publicKeyBytes = Convert.FromBase64String(sender.Ed25519PublicKey);
+            if (!_signatureRepository.Verify(signedData, signatureBytes, publicKeyBytes))
+            {
+                throw new SecurityException("İmza geçersiz.");
+            }
+
             await _messageRepository.AddAsync(message);
             await _messageRepository.SaveChangesAsync();
             return message;
