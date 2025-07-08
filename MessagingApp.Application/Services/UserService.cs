@@ -53,7 +53,7 @@ namespace MessagingApp.Application.Services
                 return null;
             }
 
-            var user = new User(createUserDto.Nickname, createUserDto.X25519PublicKey, createUserDto.Ed25519PublicKey, DateTime.UtcNow, DateTime.UtcNow);
+            var user = new User(createUserDto.Nickname, createUserDto.X25519PublicKey, createUserDto.Ed25519PublicKey, DateTime.UtcNow.AddHours(3));
             await _userRepository.AddAsync(user);
             await _userRepository.SaveChangesAsync();
             return user;
@@ -68,7 +68,6 @@ namespace MessagingApp.Application.Services
             // Güncellenebilir alanlar
             existingUser.X25519PublicKey = user.X25519PublicKey;
             existingUser.Ed25519PublicKey = user.Ed25519PublicKey;
-            existingUser.LastActivityDate = DateTime.UtcNow;
 
             _userRepository.Update(existingUser);
             await _userRepository.SaveChangesAsync();

@@ -49,7 +49,7 @@ namespace MessagingApp.Application.Services
                 return null;
             }
 
-            var message = new Message(sendMessageDto.Sender.ToLower(), sendMessageDto.Receiver.ToLower(), sendMessageDto.Content, DateTime.UtcNow);
+            var message = new Message(sendMessageDto.Sender.ToLower(), sendMessageDto.Receiver.ToLower(), sendMessageDto.Content, DateTime.UtcNow.AddHours(3));
             string signedData = $"{message.Sender}|{message.Receiver}|{message.Content}";
             byte[] signatureBytes = Convert.FromBase64String(sendMessageDto.Signature);
             byte[] publicKeyBytes = Convert.FromBase64String(sender.Ed25519PublicKey);
