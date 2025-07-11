@@ -1,0 +1,15 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Launch MessagingApp.Api",
+      "type": "coreclr",
+      "request": "launch",
+      "program": "${workspaceFolder}/MessagingApp.Api/bin/Debug/net9.0/MessagingApp.Api.dll",
+      "args": [],
+      "cwd": "${workspaceFolder}/MessagingApp.Api",
+      "stopAtEntry": false,
+      "console": "internalConsole"
+    }
+  ]
+}
