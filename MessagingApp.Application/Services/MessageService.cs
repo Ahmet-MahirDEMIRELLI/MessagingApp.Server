@@ -25,17 +25,17 @@ namespace MessagingApp.Application.Services
             _signatureRepository = signatureRepository;
         }
 
-        public async Task<List<Message>> GetNewMessagesAsync(string nickname, String lastMessageTime)
+        public async Task<List<Message>?> GetNewMessagesAsync(string nickname, String lastMessageTime)
         {
             return await _messageRepository.GetNewMessagesAsync(nickname, lastMessageTime);
         }
 
-        public async Task<List<Message>> GetMessagesByNicknameAsync(string nickname)
+        public async Task<List<Message>?> GetMessagesByNicknameAsync(string nickname)
         {
             return await _messageRepository.GetMessagesByNicknameAsync(nickname);
         }
 
-        public async Task<Message> SendMessageAsync(SendMessageDto sendMessageDto)
+        public async Task<Message?> SendMessageAsync(SendMessageDto sendMessageDto)
         {
             var sender = await _userService.GetUserByNicknameAsync(sendMessageDto.Sender);
             if (sender == null)

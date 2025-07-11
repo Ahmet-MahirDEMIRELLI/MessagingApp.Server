@@ -19,11 +19,6 @@ namespace MessagingApp.Application.Services
             _userRepository = userRepository;
         }
 
-        public async Task<IEnumerable<User>> GetAllUsersAsync()
-        {
-            return await _userRepository.GetAllAsync();
-        }
-
         public async Task<User?> GetUserByNicknameAsync(string nickname)
         {
             return await _userRepository.GetByNicknameAsync(nickname);
@@ -57,34 +52,6 @@ namespace MessagingApp.Application.Services
             await _userRepository.AddAsync(user);
             await _userRepository.SaveChangesAsync();
             return user;
-        }
-
-        public async Task<bool> UpdateUserAsync(string nickname, User user)
-        {
-            var existingUser = await _userRepository.GetByNicknameAsync(nickname);
-            if (existingUser == null)
-                return false;
-
-            // Güncellenebilir alanlar
-            existingUser.X25519PublicKey = user.X25519PublicKey;
-            existingUser.Ed25519PublicKey = user.Ed25519PublicKey;
-
-            _userRepository.Update(existingUser);
-            await _userRepository.SaveChangesAsync();
-
-            return true;
-        }
-
-        public async Task<bool> DeleteUserAsync(string nickname)
-        {
-            var user = await _userRepository.GetByNicknameAsync(nickname);
-            if (user == null)
-                return false;
-
-            _userRepository.Delete(user);
-            await _userRepository.SaveChangesAsync();
-
-            return true;
         }
     }
 }

@@ -1,7 +1,5 @@
 ﻿using MessagingApp.Application.DTOs;
 using MessagingApp.Application.Interfaces;
-using MessagingApp.Application.Services;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security;
 

@@ -1,6 +1,5 @@
 ﻿using MessagingApp.Application.DTOs;
 using MessagingApp.Application.Interfaces;
-using MessagingApp.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MessagingApp.Api.Controller
@@ -38,26 +37,6 @@ namespace MessagingApp.Api.Controller
                 return BadRequest("Invalid nickname or user already exists.");
 
             return CreatedAtAction(nameof(GetKeysByNickname), new { nickname = createdUser.Nickname }, createdUser);
-        }
-
-        [HttpPut("{nickname}")]
-        public async Task<IActionResult> Update(string nickname, [FromBody] User user)
-        {
-            var updated = await _userService.UpdateUserAsync(nickname, user);
-            if (!updated)
-                return NotFound();
-
-            return NoContent();
-        }
-
-        [HttpDelete("{nickname}")]
-        public async Task<IActionResult> Delete(string nickname)
-        {
-            var deleted = await _userService.DeleteUserAsync(nickname);
-            if (!deleted)
-                return NotFound();
-
-            return NoContent();
-        }
+        }      
     }
 }

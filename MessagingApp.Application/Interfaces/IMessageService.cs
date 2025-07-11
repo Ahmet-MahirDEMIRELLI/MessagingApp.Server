@@ -10,8 +10,8 @@ namespace MessagingApp.Application.Interfaces
 {
     public interface IMessageService
     {
-        Task<List<Message>> GetMessagesByNicknameAsync(String nickname);
-        Task<List<Message>> GetNewMessagesAsync(String nickname, String lastMessageTime);
-        Task<Message> SendMessageAsync(SendMessageDto sendMessageDto);
+        Task<List<Message>?> GetMessagesByNicknameAsync(String nickname);
+        Task<List<Message>?> GetNewMessagesAsync(String nickname, String lastMessageTime);
+        Task<Message?> SendMessageAsync(SendMessageDto sendMessageDto);
     }
 }
