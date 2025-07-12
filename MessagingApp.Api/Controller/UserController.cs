@@ -1,11 +1,13 @@
 ﻿using MessagingApp.Application.DTOs;
 using MessagingApp.Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace MessagingApp.Api.Controller
 {
     [ApiController]
     [Route("api/[controller]")]
+    [EnableRateLimiting("fixed")]
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;

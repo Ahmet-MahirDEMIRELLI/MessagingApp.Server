@@ -48,6 +48,12 @@ namespace MessagingApp.Application.Services
                 return null;
             }
 
+            var allowedUsers = new HashSet<string> { "amd", "nef", "nihal", "sukru" };
+            if (!allowedUsers.Contains(createUserDto.Nickname))
+            {
+                return null;
+            }
+
             var user = new User(createUserDto.Nickname, createUserDto.X25519PublicKey, createUserDto.Ed25519PublicKey, DateTime.UtcNow.AddHours(3));
             await _userRepository.AddAsync(user);
             await _userRepository.SaveChangesAsync();
