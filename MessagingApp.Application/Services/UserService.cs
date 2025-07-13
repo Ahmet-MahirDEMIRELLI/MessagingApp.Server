@@ -48,7 +48,7 @@ namespace MessagingApp.Application.Services
                 return null;
             }
 
-            var allowedUsers = new HashSet<string> { "amd", "nef"};
+            var allowedUsers = new HashSet<string> { "amd", "nef", "nihal", "sukru"};
             if (!allowedUsers.Contains(createUserDto.Nickname))
             {
                 return null;
