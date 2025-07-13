@@ -1,37 +1,35 @@
 version: '3.9'
 
 services:
-  sqlserver:
-    image: mcr.microsoft.com/mssql/server:2022-latest
-    container_name: messaging-sql-server
-    environment:
-      SA_PASSWORD: "YourStrong!Passw0rd"
-      ACCEPT_EULA: "Y"
-    ports:
-      - "1433:1433"
-    volumes:
-      - sqlserverdata:/var/opt/mssql
-    healthcheck:
-      test: ["CMD-SHELL", "/opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P YourStrong!Passw0rd -Q 'SELECT 1'"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-
-  backend:
+  api:
     build:
       context: .
-      dockerfile: ./Dockerfile
-    container_name: messaging-app-backend
+      dockerfile: Dockerfile
+    container_name: messagingapp_api
     depends_on:
-      - sqlserver
-    environment:
-      ConnectionStrings__DefaultConnection: "Server=sqlserver;Database=MessagingAppDb;User Id=sa;Password=YourStrong!Passw0rd;TrustServerCertificate=True;"
+      - db
     ports:
-      - "5000:8080"
-    # production için mount yapma, eğer geliştirme yapacaksan aşağıdaki satırı açabilirsin
-    # volumes:
-    #   - .:/app
-    working_dir: /app
+      - "port1:port2"
+    networks:
+      - nginx-network
+
+  db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: messagingapp_db
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=YourStrong!Passw0rd
+      - MSSQL_PID=Express
+    ports:
+      - "db_port:db_port"
+    volumes:
+      - sql_data:/var/opt/mssql
+    networks:
+      - nginx-network
+
+networks:
+  nginx-network:
+    external: true
 
 volumes:
-  sqlserverdata:
+  sql_data:
